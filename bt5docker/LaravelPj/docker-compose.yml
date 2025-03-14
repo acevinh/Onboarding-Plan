@@ -2,23 +2,18 @@
 
 services:
   app:
-    user: "www-data"
     build:
       context: .
       dockerfile: Dockerfile
     image: laravelpj
-    environment:
-      - TZ=Asia/Ho_Chi_Minh
     container_name: laravelpj
     volumes:
-      - .:/var/www:cached
+      - .:/var/www
     networks:
       - laravel-network
 
   nginx:
     image: nginx:alpine
-    environment:
-      - TZ=Asia/Ho_Chi_Minh
     container_name: nginx
     ports:
       - "8000:80"
@@ -28,25 +23,17 @@ services:
     networks:
       - laravel-network
 
-  mysql:
-    image: mysql:8.0
+  db:
+    image: mysql:5.7
     container_name: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: laravelpj
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
     ports:
       - "3307:3306"
-    networks:
-      - laravel-network
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    restart: always
-    ports:
-      - "8080:80"
-    environment:
-      PMA_HOST: mysql
     networks:
       - laravel-network
 

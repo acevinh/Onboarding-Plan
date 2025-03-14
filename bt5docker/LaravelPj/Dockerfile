@@ -1,17 +1,8 @@
-# Dockerfile
-FROM php:8.2-fpm-alpine
+# Sử dụng image PHP
+FROM php:8.1-fpm
 
-# Cài đặt các phần mở rộng PHP cần thiết
-RUN apk add --no-cache \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    libwebp-dev \
-    libxpm-dev \
-    libzip-dev \
-    zlib-dev \
-    oniguruma-dev \
-    && docker-php-ext-configure gd --with-jpeg --with-webp --with-xpm \
-    && docker-php-ext-install gd zip pdo pdo_mysql
+# Cài đặt các extension cần thiết
+RUN docker-php-ext-install pdo pdo_mysql
 
 # Cài đặt Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -22,14 +13,8 @@ WORKDIR /var/www
 # Sao chép mã nguồn vào container
 COPY . .
 
-# Cài đặt các phụ thuộc của Laravel
+# Cài đặt các package của Laravel
 RUN composer install
 
-# Đặt quyền cho thư mục storage và bootstrap/cache
-RUN chown -R www-data:www-data storage bootstrap/cache
-
-# Expose port 9000
-EXPOSE 9000
-
-# Khởi động PHP-FPM
-CMD ["php-fpm"]
+# Cấu hình quyền cho thư mục storage và bootstrap/cache
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
