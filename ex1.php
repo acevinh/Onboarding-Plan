@@ -47,17 +47,12 @@ echo "Tính đa hình: "
 
 <?php
 
-// ví dụ rieng sd tính đa hình 
-class Shape
+interface Shape 
 {
-    public function area()
-    {
-        return 0;
-    }
+    public function area(); 
 }
 
-
-class Rectangle extends Shape
+class Rectangle implements Shape
 {
     protected $width;
     protected $height;
@@ -74,8 +69,7 @@ class Rectangle extends Shape
     }
 }
 
-
-class Circle extends Shape
+class Circle implements Shape
 {
     protected $radius;
 
@@ -90,20 +84,14 @@ class Circle extends Shape
     }
 }
 
-
 $shapes = [
     new Rectangle(5, 10),
     new Circle(7)
 ];
 
-
 foreach ($shapes as $shape) {
     echo "Area: " . $shape->area() . "\n";
 }
-
-// ++++++++++++++
-// Kế thừa: Tái sử dụng mã và tổ chức cấu trúc lớp.
-// Đa hình: Xử lý các đối tượng khác nhau qua cùng một phương thức, tạo tính linh hoạt.
 ?>
 
 
