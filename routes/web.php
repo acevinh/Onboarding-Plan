@@ -18,7 +18,9 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/ 
+*/
+
+
 Route::middleware(['guest'])->group(function () {
     Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('login', [AuthController::class, 'login'])->name('login.post');
@@ -35,6 +37,10 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     // Route::group(['middleware'=>['role:yeyrseyur']])
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('try', function () {
+        return view('welcome');
+    });
+
     Route::prefix('store')->group(function (){
         Route::get('list', [StoreController::class, 'index'])->name('store.list');
         Route::delete('delete-store/{id}', [StoreController::class, 'destroy'])->name('store.delete'); 

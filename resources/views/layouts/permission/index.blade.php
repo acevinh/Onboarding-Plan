@@ -49,6 +49,10 @@
             </tbody>
         </table>
     </div>
+     <!-- Phân trang -->
+     <div class="mt-4 ">
+        {{ $permissions->links('pagination::tailwind') }} <!-- Sử dụng Tailwind CSS cho phân trang -->
+    </div>
 @endsection
 @section('js')
 @endsection

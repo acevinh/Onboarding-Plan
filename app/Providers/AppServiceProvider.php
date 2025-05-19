@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Observers\UserObserver;
 use App\Repositories\Contracts\StoreRepositoryInterface;
 use App\Repositories\StoreRepository; // Đảm bảo bạn đã import lớp StoreRepository
 use App\Repositories\Contracts\UserRepositoryInterface;
@@ -11,20 +13,24 @@ use App\Repositories\UserRepository;
 use App\Services\DashBoardService;
 use App\Services\ProductService;
 use App\Services\StoreService;
+use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 class AppServiceProvider extends ServiceProvider
 {
+    
     /**
      * Register any application services.
      */
     public function register(): void
     {
+      
         // Liên kết UserRepositoryInterface với UserRepository
         $this->app->bind(
             UserRepositoryInterface::class,
             UserRepository::class
         );
+        
 
         // Liên kết StoreRepositoryInterface với StoreRepository
         $this->app->bind(
@@ -53,5 +59,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::before(function ($user, $ability) {
             return $user->hasRole('owner') ? true : null;
         });
+        User::observe(UserObserver::class);
     }
 }

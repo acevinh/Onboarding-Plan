@@ -28,6 +28,7 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
+        // dd('Hello') ;
         $this->authService->register($request->validated());
         return redirect()->route('login')->with('status', 'Registration successful! Please login.');
     }

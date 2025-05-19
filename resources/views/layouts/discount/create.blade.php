@@ -68,7 +68,6 @@
                 </button>
             </div>
             <div id="productContainer" class="mb-4">
-                <!-- Danh sách sản phẩm đã chọn sẽ được thêm vào đây -->
             </div>
             <input type="hidden" name="selected_products" id="selectedProducts">
         </div>
@@ -142,7 +141,6 @@
 @section('js')
 <script>
     let ruleIndex = 1;
-
     document.getElementById('addRule').addEventListener('click', function() {
         const rulesContainer = document.getElementById('rulesContainer');
         const newRule = document.createElement('div');
@@ -183,7 +181,7 @@
         rulesContainer.appendChild(newRule);
         ruleIndex++;
 
-        // Add event listener to the new remove button
+     
         newRule.querySelector('.btn-remove-rule').addEventListener('click', function() {
             rulesContainer.removeChild(newRule);
         });
@@ -208,9 +206,7 @@ document.getElementById('addProduct').addEventListener('click', function() {
     const productSelect = document.getElementById('productSelect');
     const selectedProductId = productSelect.value;
     const selectedProductName = productSelect.options[productSelect.selectedIndex].text;
-
     if (selectedProductId) {
-        // Kiểm tra xem sản phẩm đã được thêm vào danh sách chưa
         const existingProducts = document.querySelectorAll('#productContainer .product-item');
         let productExists = false;
 
@@ -222,14 +218,12 @@ document.getElementById('addProduct').addEventListener('click', function() {
 
         if (productExists) {
             alert('This product has already been added.');
-            return; // Ngừng thực hiện nếu sản phẩm đã tồn tại
+            return; 
         }
-
-        // Tạo một div mới cho sản phẩm đã chọn
         const productContainer = document.getElementById('productContainer');
         const productDiv = document.createElement('div');
         productDiv.classList.add('mb-2', 'flex', 'items-center', 'product-item');
-        productDiv.dataset.productId = selectedProductId; // Lưu ID sản phẩm vào data attribute
+        productDiv.dataset.productId = selectedProductId; 
         productDiv.innerHTML = `
             <span class="mr-2">${selectedProductName}</span>
             <button type="button" class="remove-product ml-2 bg-red-500 text-white rounded p-1">
@@ -237,17 +231,11 @@ document.getElementById('addProduct').addEventListener('click', function() {
             </button>
         `;
         productContainer.appendChild(productDiv);
-
-        // Thêm sự kiện cho nút xóa sản phẩm
         productDiv.querySelector('.remove-product').addEventListener('click', function() {
             productContainer.removeChild(productDiv);
             updateSelectedProducts();
         });
-
-        // Reset dropdown
         productSelect.value = '';
-
-        // Cập nhật trường ẩn selected_products
         updateSelectedProducts();
     } else {
         alert('Please select a product to add.');
@@ -260,9 +248,6 @@ function updateSelectedProducts() {
         selectedProducts.push(item.dataset.productId);
     });
     document.getElementById('selectedProducts').value = selectedProducts.join(',');
-}
-
-
-    
+}   
 </script>
 @endsection

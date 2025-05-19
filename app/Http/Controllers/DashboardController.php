@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $this->dashboardService = $dashboardService;
         $this->middleware('permission:view dashboard', ['only' => ['index']]);
     }
-
+    
     public function index(Request $request)
     {
         $startDate = $request->input('startDate');
