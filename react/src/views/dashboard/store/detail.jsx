@@ -1,217 +1,32 @@
-import React, { useEffect, useState } from "react";
+  import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { getStoresDetails } from "../../../api/storeApi";
-import {
-    deleteMultipleDiscounts,
-    updateStatusMultipleDiscounts,
-} from "../../../api/discountApi";
+import { useStoreDetail } from "../../../hooks/store/useStoreDetail";
+
 
 function StoreDetails() {
-    const { id } = useParams();
-    const [store, setStore] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [selectedDiscounts, setSelectedDiscounts] = useState([]);
-    const [successMessage, setSuccessMessage] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const discountsPerPage = 5;
-    // const token = localStorage.getItem("auth_token");
 
-    useEffect(() => {
-        const fetchStoreDetails = async () => {
-            try {
-                const response = await getStoresDetails(id);
-
-                const data = await response.data;
-                if (data.success) {
-                    setStore(data.data);
-                } else {
-                    setError("Failed to fetch store details");
-                }
-            } catch (err) {
-                setError("Error fetching data: " + err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchStoreDetails();
-    }, [id]);
-
-    const indexOfLastDiscount = currentPage * discountsPerPage;
-    const indexOfFirstDiscount = indexOfLastDiscount - discountsPerPage;
-    const currentDiscounts =
-        store?.discounts?.slice(indexOfFirstDiscount, indexOfLastDiscount) ||
-        [];
-    const totalPages = Math.ceil(
-        (store?.discounts?.length || 0) / discountsPerPage
-    );
-
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-    const toggleDiscountSelection = (discountId) => {
-        setSelectedDiscounts((prev) =>
-            prev.includes(discountId)
-                ? prev.filter((id) => id !== discountId)
-                : [...prev, discountId]
-        );
-    };
-
-    const toggleSelectAll = (e) => {
-        if (e.target.checked && store?.discounts) {
-            setSelectedDiscounts(store.discounts.map((d) => d.id));
-        } else {
-            setSelectedDiscounts([]);
-        }
-    };
-
-    const formatDate = (dateString) => {
-        if (!dateString) return "N/A";
-        const date = new Date(dateString);
-        return date.toLocaleDateString();
-    };
-
-    const deleteSelectedDiscounts = async () => {
-  if (selectedDiscounts.length === 0) {
-    setErrorMessage('Please select at least one discount to delete');
-    setTimeout(() => setErrorMessage(''), 3000);
-    return;
-  }
-
-  if (window.confirm('Are you sure you want to delete the selected discounts?')) {
-    try {
-      const response = await deleteMultipleDiscounts(selectedDiscounts);
-      const data = response.data;
-
-      // Cập nhật UI sau khi xóa thành công
-      setStore(prev => ({
-        ...prev,
-        discounts: prev.discounts.filter(d => !selectedDiscounts.includes(d.id))
-      }));
-      setSelectedDiscounts([]);
-      setSuccessMessage('Selected discounts deleted successfully!');
-      setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (err) {
-      setErrorMessage(err.message);
-      setTimeout(() => setErrorMessage(''), 3000);
-    }
-  }
-};
-
-    const updateStatusForSelected = async (status) => {
-        if (selectedDiscounts.length === 0) {
-            setErrorMessage("Please select at least one discount to update");
-            setTimeout(() => setErrorMessage(""), 3000);
-            return;
-        }
-
-        const action = status ? "activate" : "deactivate";
-        if (
-            window.confirm(
-                `Are you sure you want to ${action} the selected discounts?`
-            )
-        ) {
-            try {
-                const response = await updateStatusMultipleDiscounts(
-                    selectedDiscounts,
-                    status
-                );
-                const data = response.data;
-                if (data.success) {
-                    setStore((prev) => ({
-                        ...prev,
-                        discounts: prev.discounts.map((d) =>
-                            selectedDiscounts.includes(d.id)
-                                ? { ...d, status }
-                                : d
-                        ),
-                    }));
-                    setSuccessMessage(`Discounts ${action}d successfully!`);
-                    setTimeout(() => setSuccessMessage(""), 3000);
-                } else {
-                    throw new Error(data.message || "Failed to update status");
-                }
-            } catch (err) {
-                setErrorMessage(err.message);
-                setTimeout(() => setErrorMessage(""), 3000);
-            }
-        }
-    };
-
-    // const toggleDiscountStatus = async (discountId, currentStatus) => {
-    //     const newStatus = currentStatus ? 0 : 1;
-    //     if (window.confirm(`Are you sure you want to ${newStatus ? 'activate' : 'deactivate'} this discount?`)) {
-    //         try {
-    //             const response = await fetch(`http://cmsremake.test/api/discounts/${discountId}/status`, {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                     'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //                 },
-    //                 body: JSON.stringify({ status: newStatus })
-    //             });
-
-    //             const data = await response.json();
-    //             if (data.success) {
-    //                 setStore(prev => ({
-    //                     ...prev,
-    //                     discounts: prev.discounts.map(d =>
-    //                         d.id === discountId ? { ...d, status: newStatus } : d
-    //                     )
-    //                 }));
-    //                 setSuccessMessage('Status updated successfully!');
-    //                 setTimeout(() => setSuccessMessage(''), 3000);
-    //             } else {
-    //                 throw new Error(data.message || 'Failed to update status');
-    //             }
-    //         } catch (err) {
-    //             setErrorMessage(err.message);
-    //             setTimeout(() => setErrorMessage(''), 3000);
-    //         }
-    //     }
-    // };
-
-    const deleteDiscount = async (discountId) => {
-        if (window.confirm("Are you sure you want to delete this discount?")) {
-            try {
-                const response = await fetch(
-                    `http://cmsremake.test/api/discounts/${discountId}`,
-                    {
-                        method: "DELETE",
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                "token"
-                            )}`,
-                        },
-                    }
-                );
-
-                const data = await response.json();
-                if (data.success) {
-                    setStore((prev) => ({
-                        ...prev,
-                        discounts: prev.discounts.filter(
-                            (d) => d.id !== discountId
-                        ),
-                    }));
-                    setSuccessMessage("Discount deleted successfully!");
-                    setTimeout(() => setSuccessMessage(""), 3000);
-                } else {
-                    throw new Error(
-                        data.message || "Failed to delete discount"
-                    );
-                }
-            } catch (err) {
-                setErrorMessage(err.message);
-                setTimeout(() => setErrorMessage(""), 3000);
-            }
-        }
-    };
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
-    if (!store) return <div>Store not found</div>;
+  const {
+    store,
+    loading,
+    error,
+    selectedDiscounts,
+    successMessage,
+    errorMessage,
+    currentPage,
+    discountsPerPage,
+    currentDiscounts,
+    totalPages,
+    paginate,
+    toggleDiscountSelection,
+    toggleSelectAll,
+    formatDate,
+    deleteSelectedDiscounts,
+    updateStatusForSelected,
+    deleteDiscount
+  } = useStoreDetail();
+   if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (!store) return <div>Store not found</div>;
 
     return (
         <div className="p-4 max-w-7xl mx-auto">

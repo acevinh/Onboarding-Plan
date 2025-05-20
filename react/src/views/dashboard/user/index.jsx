@@ -1,31 +1,15 @@
-import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getUsers } from "../../../api/userApi";
+import { useUserIndex } from "../../Hooks";
 
 function UserIndex() {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    // const token = localStorage.getItem("auth_token");
-
-    useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await getUsers();
-        if (response.data.success) {
-          setUsers(response.data.data);
-        } else {
-          setError('Không lấy được dữ liệu.');
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, []);
+      const {
+    users,
+    loading,
+    error,
+    // totalUsers,
+    // activeUsers,
+    // adminUsers
+  } = useUserIndex();
 
 
     if (loading) {

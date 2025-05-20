@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
   }
 });
 
-// Gắn token
+
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = getToken();
@@ -23,22 +23,22 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ✅ Xử lý lỗi và "throw" lỗi custom nếu backend trả success: false
+
 axiosInstance.interceptors.response.use(
   (response) => {
-    // Nếu backend trả success: false => quăng lỗi luôn để component xử lý
+  
     if (response.data && response.data.success === false) {
       return Promise.reject(new Error(response.data.message || 'Yêu cầu không thành công.'));
     }
     return response;
   },
   (error) => {
-    // Nếu là lỗi HTTP (status 4xx, 5xx)
+
     const status = error.response?.status;
 
     if (status === 401) {
       localStorage.removeItem('auth_token');
-      window.location.href = '/login'; // hoặc dùng navigate()
+      window.location.href = '/login'; 
     }
 
     if (status === 403) {

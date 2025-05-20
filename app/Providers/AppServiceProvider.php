@@ -10,6 +10,7 @@ use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\ProductRepository;
 use App\Repositories\ProductRepositoryInterface;
 use App\Repositories\UserRepository;
+use App\Services\AuthService;
 use App\Services\DashBoardService;
 use App\Services\ProductService;
 use App\Services\StoreService;
@@ -48,6 +49,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             StoreService::class,
         );
+    //    $this->app->bind(UserRepository::class, AuthService::class);
+
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
     }
 

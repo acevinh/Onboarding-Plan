@@ -32,3 +32,6 @@ export const clearProductsFromDiscount = (discount_id) => {
 export const updateDiscount = (discountId, data) => {
   return axios.put(`/discounts/${discountId}`, data);
 };
+export const deleteDiscount = (id) => {
+    return axios.delete(`/discounts/${id}`);
+};

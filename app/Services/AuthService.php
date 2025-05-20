@@ -14,22 +14,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
-    protected $userRepository;
-    private static $instance = null;
+       protected $userRepository;
 
-    // Private constructor để ngăn việc tạo instance từ bên ngoài
-    private function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-    }
-
-    // Phương thức static để lấy instance
-    public static function getInstance(): self
-    {
-        if (self::$instance === null) {
-            self::$instance = new self(UserRepository::getInstance());
-        }
-        return self::$instance;
     }
 
     // Các phương thức khác giữ nguyên
@@ -38,16 +27,20 @@ class AuthService
         $data['password'] = Hash::make($data['password']);
         return $this->userRepository->create($data);
     }
-
-    public function login(array $data)
-    {
-        $user = $this->userRepository->findByEmail($data['email']);
-        if ($user && Hash::check($data['password'], $user->password)) {
-            auth()->login($user);
-            return auth()->user();
-        }
+public function login(array $credentials)
+{
+    if (!$token = JWTAuth::attempt($credentials)) {
         return false;
     }
+
+    $user = auth()->user();
+
+    return [
+        'user' => $user,
+        'token' => $token,
+    ];
+}
+
 
     public function sendResetLink($email)
     {

@@ -8,20 +8,20 @@ use App\Repositories\Contracts\UserRepositoryInterface;
 class UserRepository implements UserRepositoryInterface
 {
     protected $model;
-      private static $instance = null;
+    //   private static $instance = null;
 
     public function __construct(User $user)
     {
         $this->model = $user;
     }
         // Phương thức static để lấy instance
-    public static function getInstance(): self
-    {
-        if (self::$instance === null) {
-            self::$instance = new self(new User());
-        }
-        return self::$instance;
-    }
+    // public static function getInstance(): self
+    // {
+    //     if (self::$instance === null) {
+    //         self::$instance = new self(new User());
+    //     }
+    //     return self::$instance;
+    // }
     public function getAllWithRolesAndPermissions()
     {
         return $this->model->with(['role', 'roles', 'permissions'])->get();

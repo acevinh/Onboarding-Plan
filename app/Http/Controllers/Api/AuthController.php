@@ -28,29 +28,33 @@ class AuthController extends Controller
     /**
      * Authenticate user and return JWT token
      */
-    public function login(LoginRequest $request): JsonResponse
-    {
-        $credentials = $request->validated();
+   public function login(LoginRequest $request): JsonResponse
+{
+    $credentials = $request->validated();
 
-        try {
-            if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invalid credentials'
-                ], 401);
-            }
+    try {
+        $loginResult = $this->authService->login($credentials);
 
-            $user = Auth::user();
-            
-            return $this->createAuthResponse($user, $token);
-            
-        } catch (JWTException $e) {
+        if (!$loginResult) {
             return response()->json([
                 'success' => false,
-                'message' => 'Could not create token'
-            ], 500);
+                'message' => 'Invalid credentials'
+            ], 401);
         }
+
+        return $this->createAuthResponse(
+            $loginResult['user'],
+            $loginResult['token']
+        );
+
+    } catch (JWTException $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Could not create token'
+        ], 500);
     }
+}
+
 
     /**
      * Register a new user
