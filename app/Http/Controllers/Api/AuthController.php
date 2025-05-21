@@ -59,10 +59,10 @@ class AuthController extends Controller
     /**
      * Register a new user
      */
-    public function register(RegisterRequest $request): JsonResponse
+    public function register(Request $request): JsonResponse
     {
         try {
-            $user = $this->authService->register($request->validated());
+            $user = $this->authService->register($request->all());
             $token = JWTAuth::fromUser($user);
 
             return $this->createAuthResponse($user, $token, 201);

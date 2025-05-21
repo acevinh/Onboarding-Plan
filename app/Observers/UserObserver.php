@@ -2,11 +2,15 @@
 
 namespace App\Observers;
 
+use App\Jobs\SendEmailRegisterUser;
+use App\Jobs\SendWelcomeEmailJob;
+use App\Mail\WelcomeNewUser;
 use App\Models\User;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class UserObserver
 {
@@ -23,7 +27,7 @@ class UserObserver
     // }
     public function created(User $user): void
     {
-        //
+     SendEmailRegisterUser::dispatch($user); 
     }
 
     /**

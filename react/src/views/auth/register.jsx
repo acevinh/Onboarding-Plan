@@ -17,6 +17,7 @@ const handleSubmit = async (e) => {
     setErrorMessage("");
     let data = { username, email, password };
     
+console.log(JSON.stringify(data));
     
 
    let result = await fetch("http://cmsremake.test/api/register",{
