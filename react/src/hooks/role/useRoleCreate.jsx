@@ -5,7 +5,7 @@ import { createRoles } from "../../api/roleApi";
 
 
 
-export const useRoleEdit = ()=>{
+export const useRoleCreate = ()=>{
  const navigate = useNavigate();
   
   const [formData, setFormData] = useState({

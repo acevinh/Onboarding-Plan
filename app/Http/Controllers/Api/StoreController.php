@@ -20,9 +20,6 @@ class StoreController extends Controller
         // $this->middleware('permission:store delete', ['only' => ['destroy']]);
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $stores = $this->storeService->getAllStore();
@@ -32,9 +29,6 @@ class StoreController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $store = $this->storeService->getStoreById($id);
@@ -52,9 +46,6 @@ class StoreController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $deleted = $this->storeService->deleteStore($id);
@@ -72,9 +63,6 @@ class StoreController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage. (Not implemented)
-     */
     public function store(Request $request)
     {
         return response()->json([
@@ -82,9 +70,6 @@ class StoreController extends Controller
         ], 501);
     }
 
-    /**
-     * Update the specified resource in storage. (Not implemented)
-     */
     public function update(Request $request, string $id)
     {
         return response()->json([

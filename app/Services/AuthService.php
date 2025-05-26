@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Services;
 
+use App\Jobs\SendWelcomeEmail;
 use App\Mail\ResetPasswordMail;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -14,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
-       protected $userRepository;
+    protected $userRepository;
 
     public function __construct(UserRepository $userRepository)
     {
@@ -22,24 +24,28 @@ class AuthService
     }
 
     // Các phương thức khác giữ nguyên
-    public function register(array $data)
-    {
-        $data['password'] = Hash::make($data['password']);
-        return $this->userRepository->create($data);
-    }
-public function login(array $credentials)
+   public function register(array $data)
 {
-    if (!$token = JWTAuth::attempt($credentials)) {
-        return false;
-    }
-
-    $user = auth()->user();
-
-    return [
-        'user' => $user,
-        'token' => $token,
-    ];
+    $data['password'] = Hash::make($data['password']);
+    $user = $this->userRepository->create($data);
+    
+    // SendWelcomeEmail::dispatch($user);
+    
+    return $user;
 }
+    public function login(array $credentials)
+    {
+        if (!$token = JWTAuth::attempt($credentials)) {
+            return false;
+        }
+
+        $user = auth()->user();
+
+        return [
+            'user' => $user,
+            'token' => $token,
+        ];
+    }
 
 
     public function sendResetLink($email)
@@ -81,5 +87,4 @@ public function login(array $credentials)
     {
         return $this->userRepository->findByEmail($data['email']);
     }
-
 }

@@ -9,9 +9,7 @@ use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index()
     {
         $permissions = Permission::all();
@@ -20,9 +18,6 @@ class PermissionController extends Controller
             'permissions' => $permissions]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $permission = Permission::create(['name' => $request->name]);
@@ -63,13 +58,4 @@ class PermissionController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-  
 }

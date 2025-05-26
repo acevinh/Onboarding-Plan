@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\Role;
@@ -37,7 +38,7 @@ class UserService
             ];
         });
     }
-     public function getUserWithRoles(string $id)
+    public function getUserWithRoles(string $id)
     {
         $user = $this->userRepository->findById($id);
         $roles = Role::all();

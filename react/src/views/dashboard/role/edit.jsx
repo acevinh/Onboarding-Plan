@@ -1,6 +1,7 @@
 
 import { Navigate } from "react-router-dom";
 import { useRoleEdit } from "../../../hooks/role/useRoleEdit";
+// import { useEffect } from "react";
 
 const EditRole = () => {
     const {
@@ -25,6 +26,7 @@ const EditRole = () => {
             </div>
         );
     }
+   
 
     return (
         <div className="max-w-4xl mx-auto p-4">

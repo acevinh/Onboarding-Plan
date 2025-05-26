@@ -1,36 +1,29 @@
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+// import { toast } from "sonner";
 import { useUserEdit } from "../../../hooks/user/useUserEdit";
 
 const UserEdit = () => {
     const {
-    formData,
+         formData,
     allRoles,
     errors,
-    successMessage,
-    errorMessage,
+    // successMessage,
+    // errorMessage,
     loading,
     handleInputChange,
     handleRoleChange,
     handleSubmit,
-  } = useUserEdit();
+    } = useUserEdit();
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <div className="text-center">
-                    <span className="loading loading-spinner loading-lg"></span>
-                    <p>Loading user data...</p>
-                </div>
-            </div>
-        );
-    }
+
+
 
     return (
         <div className="max-w-4xl mx-auto p-4">
             {/* Header */}
-            <div className="flex items-center mb-6">
+            <div className="flex items-center justify-between mb-6">
                 <h1 className="text-3xl font-bold text-primary flex items-center gap-2">
                     <ion-icon
                         name="person-outline"
@@ -38,33 +31,10 @@ const UserEdit = () => {
                     ></ion-icon>
                     Edit User: {formData.username}
                 </h1>
+                <button onClick={() => navigate(-1)} className="btn btn-ghost">
+                    Back to Users
+                </button>
             </div>
-
-            {/* Success Message */}
-            {successMessage && (
-                <div className="alert alert-success shadow-lg mb-6">
-                    <div>
-                        <ion-icon
-                            name="checkmark-circle"
-                            className="text-xl"
-                        ></ion-icon>
-                        <span>{successMessage}</span>
-                    </div>
-                </div>
-            )}
-
-            {/* Error Message */}
-            {errorMessage && (
-                <div className="alert alert-error shadow-lg mb-6">
-                    <div>
-                        <ion-icon
-                            name="alert-circle"
-                            className="text-xl"
-                        ></ion-icon>
-                        <span>{errorMessage}</span>
-                    </div>
-                </div>
-            )}
 
             {/* Form Container */}
             <div className="bg-base-100 rounded-xl shadow-lg overflow-hidden">
@@ -83,7 +53,8 @@ const UserEdit = () => {
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text font-semibold">
-                                    Username
+                                    Username{" "}
+                                    <span className="text-error">*</span>
                                 </span>
                             </label>
                             <input
@@ -96,6 +67,7 @@ const UserEdit = () => {
                                 value={formData.username}
                                 onChange={handleInputChange}
                                 disabled={loading}
+                                required
                             />
                             {errors.username && (
                                 <label className="label">
@@ -109,7 +81,7 @@ const UserEdit = () => {
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text font-semibold">
-                                    Email
+                                    Email <span className="text-error">*</span>
                                 </span>
                             </label>
                             <input
@@ -122,6 +94,7 @@ const UserEdit = () => {
                                 value={formData.email}
                                 onChange={handleInputChange}
                                 disabled={loading}
+                                required
                             />
                             {errors.email && (
                                 <label className="label">
@@ -133,7 +106,7 @@ const UserEdit = () => {
                         </div>
 
                         {/* Roles Selection */}
-                        <div className="form-control">
+                          <div className="form-control">
                             <label className="label">
                                 <span className="label-text font-semibold">
                                     Roles

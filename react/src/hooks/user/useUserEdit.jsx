@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getUserDetail, updateUser } from "../../api/userApi";
+import { toast } from "sonner";
 
 export const useUserEdit = () => {
   const { userId } = useParams();
@@ -98,6 +99,8 @@ export const useUserEdit = () => {
 
       if (result.success) {
         setSuccessMessage("User updated successfully!");
+      
+      
         setTimeout(() => {
           navigate("/user");
         }, 2000);
@@ -110,7 +113,11 @@ export const useUserEdit = () => {
       setLoading(false);
     }
   };
-
+if(successMessage){
+  toast.success(successMessage )
+}else{
+  toast.error(errorMessage)
+}
   return {
     formData,
     allRoles,

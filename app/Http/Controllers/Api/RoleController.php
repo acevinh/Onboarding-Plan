@@ -9,9 +9,6 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $roles = Role::with('permissions')->get();
@@ -21,9 +18,6 @@ class RoleController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $role = Role::create(['name' => $request->name]);
@@ -57,17 +51,6 @@ class RoleController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $role = Role::findOrFail($id);

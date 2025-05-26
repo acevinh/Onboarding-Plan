@@ -55,18 +55,15 @@ class AuthController extends Controller
     }
 }
 
-
-    /**
-     * Register a new user
-     */
     public function register(Request $request): JsonResponse
     {
         try {
             $user = $this->authService->register($request->all());
-            $token = JWTAuth::fromUser($user);
-
-            return $this->createAuthResponse($user, $token, 201);
-            
+            return response()->json([
+                'success'=> true,
+                'message'=> 'Registration success'
+            ]);
+                
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -76,9 +73,7 @@ class AuthController extends Controller
         }
     }
 
-    /**
-     * Get authenticated user data
-     */
+
     public function index(): JsonResponse
     {
         try {
@@ -97,9 +92,6 @@ class AuthController extends Controller
         }
     }
 
-    /**
-     * Logout user (invalidate token)
-     */
     public function logout(): JsonResponse
     {
         try {
@@ -118,9 +110,6 @@ class AuthController extends Controller
         }
     }
 
-    /**
-     * Refresh JWT token
-     */
     public function refresh(): JsonResponse
     {
         try {
@@ -136,9 +125,6 @@ class AuthController extends Controller
         }
     }
 
-    /**
-     * Create standardized auth response
-     */
     private function createAuthResponse($user, $token, $statusCode = 200): JsonResponse
     {
         return response()->json([

@@ -13,10 +13,7 @@ class AuthController extends Controller
 {
     // protected $authService;
 
-    public function __construct( protected AuthService $authService)
-    {
-        
-    }
+    public function __construct(protected AuthService $authService) {}
 
     public function login(LoginRequest $request)
     {
@@ -28,7 +25,7 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        // dd('Hello') ;
+
         $this->authService->register($request->validated());
         return redirect()->route('login')->with('status', 'Registration successful! Please login.');
     }
@@ -41,18 +38,18 @@ class AuthController extends Controller
 
     public function resetPassword(Request $request)
     {
-        // Gọi phương thức resetPassword trong AuthService
+
         $result = $this->authService->resetPassword($request);
-    
+
         if ($result) {
             return redirect()->route('login')->with('status', 'Password has been reset successfully!');
         }
-    
+
         return back()->withErrors(['token' => 'This password reset token is invalid.']);
     }
     public function showLoginForm()
     {
-    
+
         return view('auth.login');
     }
     public function showRegisterForm()
@@ -67,7 +64,7 @@ class AuthController extends Controller
     {
         $token = $request->route('token');
         $email = $request->query('email');
-    
+
         return view('auth.reset_password', compact('token', 'email'));
     }
     public function logout()

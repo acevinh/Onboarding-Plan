@@ -1,35 +1,48 @@
-  import React from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useStoreDetail } from "../../../hooks/store/useStoreDetail";
 
-
 function StoreDetails() {
-
-  const {
-    store,
-    loading,
-    error,
-    selectedDiscounts,
-    successMessage,
-    errorMessage,
-    currentPage,
-    discountsPerPage,
-    currentDiscounts,
-    totalPages,
-    paginate,
-    toggleDiscountSelection,
-    toggleSelectAll,
-    formatDate,
-    deleteSelectedDiscounts,
-    updateStatusForSelected,
-    deleteDiscount
-  } = useStoreDetail();
-   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-  if (!store) return <div>Store not found</div>;
+    const {
+        store,
+        loading,
+        error,
+        selectedDiscounts,
+        successMessage,
+        errorMessage,
+        currentPage,
+        discountsPerPage,
+        currentDiscounts,
+        totalPages,
+        isProcessing,
+        paginate,
+        toggleDiscountSelection,
+        toggleSelectAll,
+        formatDate,
+        deleteSelectedDiscounts,
+        updateStatusForSelected,
+        deleteDiscount,
+    } = useStoreDetail();
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
+    if (!store) return <div>Store not found</div>;
 
     return (
         <div className="p-4 max-w-7xl mx-auto">
+            {/* Success and Error Messages */}
+            {successMessage && (
+                <div className="alert alert-info shadow-lg mb-6">
+                    <div>
+                        <ion-icon
+                            name="information-circle-outline"
+                            class="text-xl"
+                        ></ion-icon>
+                        <span>{successMessage}</span>
+                        {isProcessing && (
+                            <span className="loading loading-spinner loading-sm ml-2"></span>
+                        )}
+                    </div>
+                </div>
+            )}
             {/* Success and Error Messages */}
             {successMessage && (
                 <div className="alert alert-success shadow-lg mb-6">
@@ -235,40 +248,82 @@ function StoreDetails() {
                                     {selectedDiscounts.length > 0 && (
                                         <>
                                             <button
-                                                className="btn btn-error btn-sm sm:btn-md"
+                                                className={`btn btn-error btn-sm sm:btn-md ${
+                                                    isProcessing
+                                                        ? "btn-disabled"
+                                                        : ""
+                                                }`}
                                                 onClick={
                                                     deleteSelectedDiscounts
                                                 }
+                                                disabled={isProcessing}
                                             >
-                                                <ion-icon
-                                                    name="trash-outline"
-                                                    class="mr-1"
-                                                ></ion-icon>
-                                                Delete Selected
+                                                {isProcessing ? (
+                                                    <>
+                                                        <span className="loading loading-spinner loading-sm"></span>
+                                                        Processing...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <ion-icon
+                                                            name="trash-outline"
+                                                            class="mr-1"
+                                                        ></ion-icon>
+                                                        Delete Selected
+                                                    </>
+                                                )}
                                             </button>
                                             <button
-                                                className="btn btn-success btn-sm sm:btn-md"
+                                                className={`btn btn-success btn-sm sm:btn-md ${
+                                                    isProcessing
+                                                        ? "btn-disabled"
+                                                        : ""
+                                                }`}
                                                 onClick={() =>
                                                     updateStatusForSelected(1)
                                                 }
+                                                disabled={isProcessing}
                                             >
-                                                <ion-icon
-                                                    name="checkmark-outline"
-                                                    class="mr-1"
-                                                ></ion-icon>
-                                                Activate
+                                                {isProcessing ? (
+                                                    <>
+                                                        <span className="loading loading-spinner loading-sm"></span>
+                                                        Processing...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <ion-icon
+                                                            name="checkmark-outline"
+                                                            class="mr-1"
+                                                        ></ion-icon>
+                                                        Activate
+                                                    </>
+                                                )}
                                             </button>
                                             <button
-                                                className="btn btn-warning btn-sm sm:btn-md"
+                                                className={`btn btn-warning btn-sm sm:btn-md ${
+                                                    isProcessing
+                                                        ? "btn-disabled"
+                                                        : ""
+                                                }`}
                                                 onClick={() =>
                                                     updateStatusForSelected(0)
                                                 }
+                                                disabled={isProcessing}
                                             >
-                                                <ion-icon
-                                                    name="close-outline"
-                                                    class="mr-1"
-                                                ></ion-icon>
-                                                Deactivate
+                                                {isProcessing ? (
+                                                    <>
+                                                        <span className="loading loading-spinner loading-sm"></span>
+                                                        Processing...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <ion-icon
+                                                            name="close-outline"
+                                                            class="mr-1"
+                                                        ></ion-icon>
+                                                        Deactivate
+                                                    </>
+                                                )}
                                             </button>
                                         </>
                                     )}

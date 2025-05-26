@@ -23,13 +23,21 @@ import CreateRole from "./views/dashboard/role/create";
 import EditRole from "./views/dashboard/role/edit";
 import PermissionCreate from "./views/dashboard/permission/create";
 import PermissionEdit from "./views/dashboard/permission/edit";
+import { Toaster } from 'sonner'
 
 function App() {
     // const isAuthenticated = useAuth(); 
 
     return (
         <BrowserRouter>
-            <Header />
+          <Toaster 
+                position="top-right"
+                richColors
+                closeButton
+                expand={true}
+                duration={5000}
+            />
+            {/* <Header /> */}
             <Routes>
                <Route path="/" element={
                     <Navigate to={localStorage.getItem('auth_token') ? '/dashboard' : '/login'} replace />

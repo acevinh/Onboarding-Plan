@@ -59,7 +59,6 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    
     protected $productService; 
 
     public function __construct(ProductService $productService)

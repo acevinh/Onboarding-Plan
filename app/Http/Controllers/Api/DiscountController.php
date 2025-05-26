@@ -206,16 +206,12 @@ class DiscountController extends Controller
                                   ->where('product_id', $productId)
                                   ->delete();
     
-        // Luôn trả về success nếu product không tồn tại
         return response()->json([
             'success' => true,
             'message' => $deleted ? 'Product removed' : 'Product was not assigned'
         ]);
     }
 
-    /**
-     * Clear all products from discount
-     */
     public function clearProducts(Request $request)
     {
         $discountId = $request->input('discount_id');

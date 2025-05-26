@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useRoleEdit } from "../../../hooks/role/useRoleEdit";
+import { useRoleCreate } from "../../../hooks/role/useRoleCreate";
 const CreateRole = () => {
     const navigate = useNavigate();
 
@@ -13,7 +13,7 @@ const CreateRole = () => {
         handleInputChange,
         handlePermissionChange,
         handleSubmit,
-    } = useRoleEdit();
+    } = useRoleCreate();
 
     if (loading && allPermissions.length === 0) {
         return (
